@@ -1,11 +1,11 @@
 version: '3.8'
 services: 
-  nginx: # services name (unique)
+  nginx: # services name (unique) debe ser único para cada aplicación que se vaya agregado. Elegir un nombre significativo
     image: nginx:alpine
     labels: 
-      - "traefik.http.routers.nginx.rule=Host(`nginx.app.test`)"
-      - "traefik.http.routers.nginx.entrypoints=websecurity"
-      - "traefik.http.routers.nginx.tls.certresolver=myresolver"
+      - "traefik.http.routers.nginx.rule=Host(`nginx.app.test`)" #nginx > <service_name>
+      - "traefik.http.routers.nginx.entrypoints=websecurity" #Para forzar el uso de HTTPS y certificados
+      - "traefik.http.routers.nginx.tls.certresolver=myresolver" #Para forzar el uso de HTTPS y certificados
     networks: 
       traefik_network:
 networks: 

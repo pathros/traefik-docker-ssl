@@ -1,28 +1,28 @@
 version: '3.8'
 services: 
   traefik: # apache.app.test - nginx.app.test
-    image: traefik:v2.3.6
+    image: traefik:v2.6.1
     labels: 
-      - "traefik.http.routers.api.rule=Host(`app.test`)"
+      - "traefik.http.routers.api.rule=Host(`app.test`)" #Estos labels son para acceder al dashboard con dominio
       - "traefik.http.routers.api.service=api@internal"
       - "traefik.http.routers.api.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=admin:{SHA}fEqNCco3Yq9h5ZUglD3CZJT4lBs="
-      - "traefik.http.routers.traefik.entrypoints=websecurity"
-      - "traefik.http.routers.traefik.tls.certresolver=myresolver"
+      - "traefik.http.middlewares.auth.basicauth.users=admin:{SHA}fEqNCco3Yq9h5ZUglD3CZJT4lBs=" #La contraseña en hash (htpasswd generator), que corresponde a: 123456 en sha1
+      - "traefik.http.routers.traefik.entrypoints=websecurity" #Hace referencia a "traefik.yml" Para el https
+      - "traefik.http.routers.traefik.tls.certresolver=myresolver" #Hace referencia a "traefik.yml" El que nos va a resolver el certificado
     ports: 
       - 80:80
       - 443:443
     volumes: 
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.yml:/traefik.yml
-      - ./acme.json:/acme.json
-      - ./traefik.log:/traefik.log
-      - ./config.yml:/config.yml
+      - ./traefik.yml:/traefik.yml #Configuración estática del proveedor
+      - ./acme.json:/acme.json #Debe ser creado de manera manual dentro del servidor y chmod 600 acme.json y debe estar vacío, ya que nosotros no lo vamos a llenar.
+      - ./traefik.log:/traefik.log #Crear el archivo en el servidor.
+      - ./config.yml:/config.yml #Crear el archivo de rutas
     networks: 
       traefik_network:
 networks: 
   traefik_network:
-    name: traefik_net
+    name: traefik_net #El nombre que quieras: docker network ls
     driver: bridge
     ipam: 
       driver: default      

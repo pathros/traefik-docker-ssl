@@ -1,11 +1,12 @@
 http:
   routers:
     apache:
-      rule: "Host(`server.nginx.app.test`)"
-      service: apache-service
+      rule: "Host(`server.nginx.app.test`)" #Ejemplo de redireccionamiento, de ese dominio
+      service: apache-service # a este servicio, el cual está definido en la sección de servicios
 
   services:
     apache-service:   
       loadBalancer:
         servers:
-          - url: "http://127.0.0.1"
+          - url: "http://127.0.0.1" # Puede ser tanto servidores como se quiera
+          #- url: "http://otros.mas ..."

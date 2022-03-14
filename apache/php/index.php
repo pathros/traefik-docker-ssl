@@ -1,14 +1,14 @@
 <?php
 
 $array = [
-    "name" => "Jesus",
-    "lastname" => "Matiz",
+    "name" => "John",
+    "lastname" => "Doe",
     "age" => empty($_GET["age"]) ? 41 : intval($_GET["age"]),
     "servers" => [
         "server_ip" => $_SERVER["SERVER_ADDR"],
         "remote_ip" => $_SERVER["REMOTE_ADDR"]
     ],
-    "action" => "SUSCRIBETE AL CANAL SI VEZ ESTE MENSAJE!"
+    "action" => "If you're reading this, you're on the good track!"
 ];
 
 header('Content-Type: application/json');
