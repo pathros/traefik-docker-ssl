@@ -1,5 +1,6 @@
 api:
   insecure: false #true, cuando NO se va a utilizar una contraseña htpasswd
+  dashboard: true
 
 entrypoints:
   web:
@@ -9,10 +10,10 @@ entrypoints:
 
 providers:
   docker:
-    endpoint: "unix:///var/run/docker.sock"
+    endpoint: "unix:///var/run/docker.sock" #Parece que esto se deja tal cual, independientemente de si es docker rootless mode
   
-  file:
-    filename: /config.yml #
+#  file:
+#    filename: /config.yml #
 
 certificatesResolvers: #Configuraciones para solicitar los certificados SSL
   myresolver:

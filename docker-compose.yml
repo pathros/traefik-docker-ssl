@@ -3,9 +3,11 @@ services:
   traefik: # apache.app.test - nginx.app.test
     image: traefik:v2.6.1
     labels: 
-      - "traefik.http.routers.api.rule=Host(`app.test`)" #Estos labels son para acceder al dashboard con dominio
-      - "traefik.http.routers.api.service=api@internal"
-      - "traefik.http.routers.api.middlewares=auth"
+      - "traefik.enable=true" # enable the dashboard
+      - "traefik.http.routers.traefik.rule=Host(`analytica.tk`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"  #Estos labels son para acceder al dashboard con dominio
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.middlewares=auth"
+      - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.middlewares.auth.basicauth.users=admin:{SHA}fEqNCco3Yq9h5ZUglD3CZJT4lBs=" #La contraseña en hash (htpasswd generator), que corresponde a: 123456 en sha1
       - "traefik.http.routers.traefik.entrypoints=websecurity" #Hace referencia a "traefik.yml" Para el https
       - "traefik.http.routers.traefik.tls.certresolver=myresolver" #Hace referencia a "traefik.yml" El que nos va a resolver el certificado
@@ -13,7 +15,7 @@ services:
       - 80:80
       - 443:443
     volumes: 
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock #Si por ejemplo se trata de docker rootless, colocar solo del lado izquierdo "/run/user/1001/docker.sock", según $ echo $XDG_RUNTIME_DIR
       - ./traefik.yml:/traefik.yml #Configuración estática del proveedor
       - ./acme.json:/acme.json #Debe ser creado de manera manual dentro del servidor y chmod 600 acme.json y debe estar vacío, ya que nosotros no lo vamos a llenar.
       - ./traefik.log:/traefik.log #Crear el archivo en el servidor.
